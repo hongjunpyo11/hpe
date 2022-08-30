@@ -37,7 +37,7 @@ public class ArticleComment {
     @Column(name = "comment", columnDefinition = "TEXT")
     private String comment;
 
-    @Column(name = "comment_depth")
+    @Column(name = "comment_depth") // 0이면 댓글 1이면 대댓글
     private int commentDepth;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,7 +54,9 @@ public class ArticleComment {
     @JoinColumn(name = "board_id")
     private Article article;
 
-    @OneToMany(mappedBy = "commentBundle")
+    @OneToMany(mappedBy = "commentBundle", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"commentBundle", "article", "child"})
     private List<ArticleComment> child;
+
+
 }

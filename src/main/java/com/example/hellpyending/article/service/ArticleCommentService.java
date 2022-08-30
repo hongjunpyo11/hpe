@@ -50,4 +50,23 @@ public class ArticleCommentService {
         articleComment.setUpdate(LocalDateTime.now());
         articleCommentRepository.save(articleComment);
     }
+
+    @Transactional
+    public void createReply(ArticleComment articleComment, String content, Users users) {
+        ArticleComment articleComment1 = new ArticleComment();
+        articleComment1.setComment(content);
+        articleComment1.setDeleteYn(DeleteType.NORMAL);
+        articleComment1.setCreate(LocalDateTime.now());
+        articleComment1.setCommentDepth(1);
+        articleComment1.setUsers(users);
+        articleComment.getChild().add(articleComment1);
+        articleCommentRepository.save(articleComment);
+    }
+
+//    @Transactional
+//    public void createChildArticleComment(Long articleCommentId, Long id, String content) {
+//        ArticleComment articleComment = articleCommentRepository.findById(articleCommentId, id);
+//        articleComment.getChild().add(content);
+//
+//    }
 }

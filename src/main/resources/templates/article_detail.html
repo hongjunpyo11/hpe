@@ -1,6 +1,6 @@
 <html
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:th="http://thymeleaf.org"
+        xmlns:th="http://www.thymeleaf.org"
         layout:decorate="~{layout}">
 
 <html layout:decorate="~{layout}">
@@ -37,6 +37,15 @@
                     <div class="badge bg-light text-dark p-2 text-start">
                         <div th:text="${#temporals.format(articleComment.create, 'yyyy-MM-dd HH:mm')}"></div>
                     </div>
+                    <form th:action="@{|/articleComment/createReply/${articleComment.id}|}" th:object="${articleCommentForm}" method="post" class="my-3">
+                        <div th:replace="form_errors :: formErrorsFragment"></div>
+
+                        <textarea name="content" rows="5" class="form-control"></textarea>
+                        <input type="submit" value="답글등록" class="btn btn-primary my-2">
+                        <div class="card my-3" th:each="articleCommentReply : ${articleComment.getChild()}">
+                                <div class="card-text" style="white-space: pre-line;" th:text="${articleCommentReply.comment}"></div>
+                        </div>
+                    </form>
                 </div>
                 <div>
                     <a th:href="@{/articleComment/modify/{id} (id=${articleComment.id})}" class="btn btn-primary" role="button">수정</a>
