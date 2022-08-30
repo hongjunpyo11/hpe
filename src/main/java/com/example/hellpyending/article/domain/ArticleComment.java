@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -56,7 +57,12 @@ public class ArticleComment {
 
     @OneToMany(mappedBy = "commentBundle", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"commentBundle", "article", "child"})
-    private List<ArticleComment> child;
+    private List<ArticleComment> child = new ArrayList<>();
+
+    public void addChild(ArticleComment articleCommentReply) {
+        this.getChild().add(articleCommentReply);
+        articleCommentReply.setCommentBundle(this);
+    }
 
 
 }

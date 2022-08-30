@@ -5,6 +5,7 @@ import com.example.hellpyending.article.domain.Article;
 import com.example.hellpyending.article.domain.ArticleComment;
 import com.example.hellpyending.article.exception.DataNotFoundException;
 import com.example.hellpyending.article.repository.ArticleCommentRepository;
+import com.example.hellpyending.user.UserRepository;
 import com.example.hellpyending.user.entity.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ArticleCommentService {
     private final ArticleCommentRepository articleCommentRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void create(Article article, String content, Users users) {
@@ -52,16 +54,53 @@ public class ArticleCommentService {
     }
 
     @Transactional
-    public void createReply(ArticleComment articleComment, String content, Users users) {
+    public ArticleComment createReply(Long id, String content, String userName) {
+
+        Optional<ArticleComment> articleCommentOptional = articleCommentRepository.findById(id);
+        Optional<Users> usersOptional = userRepository.findByUsername(userName);
+
+        if (articleCommentOptional.isEmpty()){
+            return null;
+        } else if (usersOptional.isEmpty()){
+            return null;
+        }
+
+        ArticleComment articleComment = articleCommentOptional.get();
+        Users users = usersOptional.get();
+
         ArticleComment articleComment1 = new ArticleComment();
         articleComment1.setComment(content);
         articleComment1.setDeleteYn(DeleteType.NORMAL);
         articleComment1.setCreate(LocalDateTime.now());
         articleComment1.setCommentDepth(1);
         articleComment1.setUsers(users);
-        articleComment.getChild().add(articleComment1);
-        articleCommentRepository.save(articleComment);
+
+        articleComment.addChild(articleComment1);
+
+//        articleComment1.setCommentBundle(articleComment);
+
+//        articleComment.getChild().add(articleComment1);
+
+        return articleComment;
     }
+
+//    @Transactional
+//    public void createReply(ArticleComment articleComment, String content, Users users) {
+//
+//
+//        ArticleComment articleComment1 = new ArticleComment();
+//        articleComment1.setComment(content);
+//        articleComment1.setDeleteYn(DeleteType.NORMAL);
+//        articleComment1.setCreate(LocalDateTime.now());
+//        articleComment1.setCommentDepth(1);
+//        articleComment1.setUsers(users);
+//
+////        articleComment.addChild(articleComment1);
+//
+//        articleComment1.setCommentBundle(articleComment);
+//
+//        articleComment.getChild().add(articleComment1);
+//    }
 
 //    @Transactional
 //    public void createChildArticleComment(Long articleCommentId, Long id, String content) {

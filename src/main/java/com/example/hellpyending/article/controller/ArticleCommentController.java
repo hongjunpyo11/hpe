@@ -95,18 +95,24 @@ public class ArticleCommentController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createReply/{id}")
     public String articleCommentReply(Model model, @Valid ArticleCommentForm articleCommentForm, BindingResult bindingResult, @PathVariable("id") Long id, Principal principal) {
-        ArticleComment articleComment = articleCommentService.getArticleComment(id);
+//        ArticleComment articleComment = articleCommentService.getArticleComment(id);
 
-        if ( bindingResult.hasErrors() ) {
-            model.addAttribute("articleComment", articleComment);
-            return "article_detail";
+//        if ( bindingResult.hasErrors() ) {
+//            model.addAttribute("articleComment", articleComment);
+//            return "article_detail";
+//        }
+
+//        Users users = userService.getUser(principal.getName());
+
+        if(principal == null){
+            // null 처리
         }
 
-        Users users = userService.getUser(principal.getName());
+        ArticleComment articleComment = articleCommentService.createReply(id, articleCommentForm.getContent(), principal.getName());
 
-        articleCommentService.createReply(articleComment, articleCommentForm.getContent(), users);
+        // null 처리
 
-        return "redirect:/article/detail/%d".formatted(articleComment.getId());
+        return "redirect:/article/detail/%d".formatted(articleComment.getArticle().getId());
 
     }
 
