@@ -55,7 +55,7 @@ public class ArticleComment {
     @JoinColumn(name = "board_id")
     private Article article;
 
-    @OneToMany(mappedBy = "commentBundle", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "commentBundle", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"commentBundle", "article", "child"})
     private List<ArticleComment> child = new ArrayList<>();
 
