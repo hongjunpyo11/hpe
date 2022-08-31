@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,18 +69,14 @@ public class ArticleCommentService {
         ArticleComment articleComment = articleCommentOptional.get();
         Users users = usersOptional.get();
 
-        ArticleComment articleComment1 = new ArticleComment();
-        articleComment1.setComment(content);
-        articleComment1.setDeleteYn(DeleteType.NORMAL);
-        articleComment1.setCreate(LocalDateTime.now());
-        articleComment1.setCommentDepth(1);
-        articleComment1.setUsers(users);
+        ArticleComment replyParam = new ArticleComment();
+        replyParam.setComment(content);
+        replyParam.setDeleteYn(DeleteType.NORMAL);
+        replyParam.setCreate(LocalDateTime.now());
+        replyParam.setCommentDepth(1);
+        replyParam.setUsers(users);
 
-        articleComment.addChild(articleComment1);
-
-//        articleComment1.setCommentBundle(articleComment);
-
-//        articleComment.getChild().add(articleComment1);
+        articleComment.addChild(articleCommentRepository.save(replyParam));
 
         return articleComment;
     }

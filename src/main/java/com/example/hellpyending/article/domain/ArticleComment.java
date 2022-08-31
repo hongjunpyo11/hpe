@@ -55,13 +55,13 @@ public class ArticleComment {
     @JoinColumn(name = "board_id")
     private Article article;
 
-    @OneToMany(mappedBy = "commentBundle", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "commentBundle", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"commentBundle", "article", "child"})
     private List<ArticleComment> child = new ArrayList<>();
 
     public void addChild(ArticleComment articleCommentReply) {
-        this.getChild().add(articleCommentReply);
         articleCommentReply.setCommentBundle(this);
+        this.getChild().add(articleCommentReply);
     }
 
 

@@ -43,6 +43,9 @@ public class ArticleService {
         return articleRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("no %d question not found,".formatted(id)));
 
+//        return articleRepository.findByIdAndDeleteYn(id, DeleteType.NORMAL)
+//                .orElseThrow(() -> new DataNotFoundException("no %d question not found,".formatted(id)));
+        // jpa 내장 메서드는 대댓글 수 만큼 댓글이 복사되는 오류가 생기고 커스텀한 메서드만 오류가 안생김
     }
 
     @Transactional
