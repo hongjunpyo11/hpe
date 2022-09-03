@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -22,5 +23,9 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findByTitleContainsAndDeleteYn(String kw, DeleteType deleteYn, Pageable pageable);
 
     Optional<Article> findByIdAndDeleteYn(Long id, DeleteType deleteYn);
+
+    @Modifying
+    @Query("update Article a set a.hitCount = a.hitCount + 1 where a.id = :id")
+    int updateView(@Param("id") Long id);
 
 }

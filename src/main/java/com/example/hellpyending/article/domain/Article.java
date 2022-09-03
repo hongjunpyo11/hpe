@@ -38,7 +38,7 @@ public class Article {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "hit_count", columnDefinition = "Integer default 0")
+    @Column(name = "hit_count", columnDefinition = "Integer default 0", nullable = false)
     private Integer hitCount;
 
     @Column(name = "image_url")
